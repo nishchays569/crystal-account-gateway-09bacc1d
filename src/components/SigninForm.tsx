@@ -3,11 +3,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import api, { tokenStorage, getErrorMessage } from "@/lib/api";
 
 const signinSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().min(4, "Email is required"),
   password: z.string().min(1, "Password is required"),
   rememberMe: z.boolean().optional(),
 });
@@ -18,6 +19,7 @@ const SigninForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -34,32 +36,27 @@ const SigninForm = () => {
     setIsLoading(true);
     try {
       const payload = {
-        email: data.email,
+        phoneOrEmail: data.email,
         password: data.password,
-        rememberMe: data.rememberMe,
       };
 
-      const response = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await api.post("/auth/login", payload);
+      const { accessToken, refreshToken } = response?.data;
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Sign in failed");
-      }
+      // Store tokens using tokenStorage utility
+      tokenStorage.setTokens(accessToken, refreshToken);
 
       toast({
         title: "Success!",
         description: "You have been signed in successfully.",
       });
+
+      // Navigate to 2FA page
+      navigate("/2fa");
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Sign in failed. Please try again.",
+        description: getErrorMessage(error),
         variant: "destructive",
       });
     } finally {
