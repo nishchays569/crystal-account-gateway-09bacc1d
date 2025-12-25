@@ -24,15 +24,17 @@ interface SidebarItem {
 
 const sidebarItems: SidebarItem[] = [
   { label: "Dashboard", icon: Home, path: "/dashboard" },
-  { label: "Make Investment", icon: DollarSign, path: "/investment",disabled:true },
-  { label: "My Tree", icon: TreePine, path: "/tree" ,disabled:true},
-  { label: "Deposit", icon: Wallet, path: "/deposit",disabled:true },
-  { label: "Transfer Funds", icon: ArrowRightLeft, path: "/transfer",disabled:true },
-  { label: "Withdrawal Funds", icon: ArrowDownToLine, path: "/withdrawal" ,disabled:true},
+  { label: "Make Investment", icon: DollarSign, path: "/investment", disabled: true },
+  { label: "My Tree", icon: TreePine, path: "/tree", disabled: true },
+  { label: "Deposit", icon: Wallet, path: "/wallet/deposit" },
+  { label: "Deposit Requests", icon: FileText, path: "/wallet/deposit-requests" },
+  { label: "Transfer Funds", icon: ArrowRightLeft, path: "/transfer", disabled: true },
+  { label: "Withdrawal Funds", icon: ArrowDownToLine, path: "/wallet/withdraw" },
+  { label: "Withdrawal Requests", icon: FileText, path: "/wallet/withdraw-requests" },
   {
     label: "Reports",
     icon: FileText,
-    disabled:true,
+    disabled: true,
     children: [
       { label: "Wallet", path: "/reports/wallet" },
       { label: "Direct Income", path: "/reports/direct-income" },
@@ -48,8 +50,8 @@ const sidebarItems: SidebarItem[] = [
       { label: "Downline Deposit Fund", path: "/reports/downline-deposit" },
     ],
   },
-  { label: "Marketing Tools", icon: Wrench, path: "/marketing-tools",disabled:true },
-  { label: "Contact Support", icon: HeadphonesIcon, path: "/support",disabled:true },
+  { label: "Marketing Tools", icon: Wrench, path: "/marketing-tools", disabled: true },
+  { label: "Contact Support", icon: HeadphonesIcon, path: "/support", disabled: true },
 ];
 
 const DashboardSidebar = () => {

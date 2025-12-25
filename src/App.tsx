@@ -10,6 +10,10 @@ import TwoFactorAuth from "./pages/TwoFactorAuth";
 import Success from "./pages/Success";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
 import DashboardHome from "./pages/DashboardHome";
+import Deposit from "./pages/wallet/Deposit";
+import DepositRequests from "./pages/wallet/DepositRequests";
+import Withdraw from "./pages/wallet/Withdraw";
+import WithdrawRequests from "./pages/wallet/WithdrawRequests";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,7 +35,14 @@ const App = () => (
             {/* Dashboard Routes - wrapped in layout */}
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<DashboardHome />} />
-              {/* Add more dashboard routes here */}
+            </Route>
+
+            {/* Wallet Routes - wrapped in layout */}
+            <Route path="/wallet" element={<DashboardLayout />}>
+              <Route path="deposit" element={<Deposit />} />
+              <Route path="deposit-requests" element={<DepositRequests />} />
+              <Route path="withdraw" element={<Withdraw />} />
+              <Route path="withdraw-requests" element={<WithdrawRequests />} />
             </Route>
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

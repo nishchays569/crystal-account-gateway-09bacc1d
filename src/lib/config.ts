@@ -6,7 +6,7 @@ import type { ApiWallet, WalletCard } from "@/types/wallet";
 
 export const walletConfig: Record<
   ApiWallet["type"],
-  Omit<WalletCard, "id" | "amount">
+  Omit<WalletCard, "id" | "amount" | "type" | "balance">
 > = {
   F_WALLET: {
     label: "F Wallet",
