@@ -1,4 +1,9 @@
-import axios, { AxiosError, } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+
+// Extend axios config to include _retry property
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean;
+}
 
 // Create axios instance with base configuration
 const api = axios.create({
@@ -47,10 +52,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config as CustomAxiosRequestConfig;
 
     // Handle 401 Unauthorized - attempt token refresh
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
       originalRequest._retry = true;
 
       const refreshToken = tokenStorage.getRefreshToken();
