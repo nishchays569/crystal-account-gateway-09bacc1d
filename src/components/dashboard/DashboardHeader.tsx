@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Bell, Moon, Sun, Plus, ChevronDown } from "lucide-react";
 import { useTheme } from "next-themes";
 import { UserProfile } from "@/types/user";
@@ -49,10 +50,13 @@ const DashboardHeader = () => {
 
       {/* Right section */}
       <div className="flex items-center gap-4">
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium">
+        <Link
+          to="/wallet/deposit"
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+        >
           <Plus size={16} />
           <span>Deposit</span>
-        </button>
+        </Link>
 
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
