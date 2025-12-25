@@ -1,4 +1,5 @@
-export interface Package {
+
+interface Package {
   id: number;
   name: string;
   investmentMin: string;
@@ -10,3 +11,5 @@ export interface Package {
   createdAt: string;
   updatedAt: string;
 }
+
+export type { Package };

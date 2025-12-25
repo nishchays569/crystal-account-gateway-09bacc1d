@@ -1,4 +1,4 @@
-export interface UserProfile {
+ interface UserProfile {
   id: number;
   memberId: string;
   email: string;
@@ -12,3 +12,6 @@ export interface UserProfile {
   status: "ACTIVE" | "INACTIVE";
   isG2faEnabled: boolean;
 }
+
+
+export type { UserProfile };

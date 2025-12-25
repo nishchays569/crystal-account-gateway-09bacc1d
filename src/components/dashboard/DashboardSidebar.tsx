@@ -13,44 +13,26 @@ import {
   Wrench,
   HeadphonesIcon,
 } from "lucide-react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 
 interface SidebarItem {
   label: string;
   icon: React.ElementType;
   path?: string;
   children?: { label: string; path: string }[];
+  disabled?:true,
 }
 
 const sidebarItems: SidebarItem[] = [
   { label: "Dashboard", icon: Home, path: "/dashboard" },
-  { label: "Make Investment", icon: DollarSign, path: "/investment" },
-  { label: "My Tree", icon: TreePine, path: "/tree" },
-  { label: "Deposit", icon: Wallet, path: "/deposit" },
-  { label: "Transfer Funds", icon: ArrowRightLeft, path: "/transfer" },
-  { label: "Withdrawal Funds", icon: ArrowDownToLine, path: "/withdrawal" },
+  { label: "Make Investment", icon: DollarSign, path: "/investment",disabled:true },
+  { label: "My Tree", icon: TreePine, path: "/tree" ,disabled:true},
+  { label: "Deposit", icon: Wallet, path: "/deposit",disabled:true },
+  { label: "Transfer Funds", icon: ArrowRightLeft, path: "/transfer",disabled:true },
+  { label: "Withdrawal Funds", icon: ArrowDownToLine, path: "/withdrawal" ,disabled:true},
   {
     label: "Reports",
     icon: FileText,
+    disabled:true,
     children: [
       { label: "Wallet", path: "/reports/wallet" },
       { label: "Direct Income", path: "/reports/direct-income" },
@@ -66,14 +48,12 @@ const sidebarItems: SidebarItem[] = [
       { label: "Downline Deposit Fund", path: "/reports/downline-deposit" },
     ],
   },
-  { label: "Marketing Tools", icon: Wrench, path: "/marketing-tools" },
-  { label: "Contact Support", icon: HeadphonesIcon, path: "/support" },
+  { label: "Marketing Tools", icon: Wrench, path: "/marketing-tools",disabled:true },
+  { label: "Contact Support", icon: HeadphonesIcon, path: "/support",disabled:true },
 ];
 
 const DashboardSidebar = () => {
   const location = useLocation();
-  const { state } = useSidebar();
-  const isCollapsed = state === "collapsed";
   const [expandedItems, setExpandedItems] = useState<string[]>(["Reports"]);
 
   const toggleExpand = (label: string) => {
@@ -89,93 +69,91 @@ const DashboardSidebar = () => {
     children?.some((child) => location.pathname === child.path);
 
   return (
-    <Sidebar collapsible="icon">
+    <aside className="w-64 h-screen bg-card border-r border-border flex flex-col shrink-0">
       {/* Logo */}
-      <SidebarHeader className="border-b border-sidebar-border p-4">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <span className="text-primary-foreground font-bold text-lg">L</span>
           </div>
-          {!isCollapsed && (
-            <span className="text-sidebar-foreground font-semibold text-lg">Logo</span>
-          )}
+          <span className="text-foreground font-semibold text-lg">Logo</span>
         </div>
-      </SidebarHeader>
+      </div>
 
       {/* Navigation */}
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {sidebarItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                  {item.children ? (
-                    <Collapsible
-                      open={expandedItems.includes(item.label) && !isCollapsed}
-                      onOpenChange={() => toggleExpand(item.label)}
-                    >
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton
-                          tooltip={item.label}
-                          isActive={isChildActive(item.children)}
-                        >
-                          <item.icon className="shrink-0" />
-                          <span>{item.label}</span>
-                          {expandedItems.includes(item.label) ? (
-                            <ChevronDown className="ml-auto shrink-0" />
-                          ) : (
-                            <ChevronRight className="ml-auto shrink-0" />
-                          )}
-                        </SidebarMenuButton>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          {item.children.map((child) => (
-                            <SidebarMenuSubItem key={child.path}>
-                              <SidebarMenuSubButton
-                                asChild
-                                isActive={isActive(child.path)}
-                              >
-                                <Link to={child.path}>{child.label}</Link>
-                              </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                          ))}
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    </Collapsible>
-                  ) : (
-                    <SidebarMenuButton
-                      asChild
-                      tooltip={item.label}
-                      isActive={isActive(item.path)}
-                    >
-                      <Link to={item.path || "#"}>
-                        <item.icon className="shrink-0" />
-                        <span>{item.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
+      <nav className="flex-1 p-4 overflow-y-auto">
+        <ul className="space-y-1">
+          {sidebarItems?.map((item) => (
+            <li key={item?.label}>
+              {item?.children ? (
+                <div>
+                  <button
+                    onClick={() => toggleExpand(item.label)}
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors ${
+                      isChildActive(item?.children)
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <item.icon size={18} />
+                      <span>{item?.label}</span>
+                    </div>
+                    {expandedItems.includes(item.label) ? (
+                      <ChevronDown size={16} />
+                    ) : (
+                      <ChevronRight size={16} />
+                    )}
+                  </button>
+                  {expandedItems?.includes(item.label) && (
+                    <ul className="mt-1 ml-6 space-y-1">
+                      {item.children.map((child) => (
+                        <li key={child.path}>
+                          <Link
+                            to={child.path}
+                            className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
+                              isActive(child.path)
+                                ? "text-primary"
+                                : "text-muted-foreground hover:text-foreground"
+                            }`}
+                          >
+                            {child.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   )}
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+                </div>
+              ) : (
+                <Link
+                  to={item.path || "#"}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
+                    isActive(item.path)
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  }`}
+                >
+                  <item.icon size={18} />
+                  <span>{item.label}</span>
+                </Link>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       {/* Footer */}
-      <SidebarFooter className="border-t border-sidebar-border p-4">
-        {!isCollapsed && (
-          <div className="flex gap-4 text-xs text-sidebar-foreground/70">
-            <Link to="/privacy" className="hover:text-sidebar-foreground transition-colors">
-              Privacy Policy
-            </Link>
-            <Link to="/terms" className="hover:text-sidebar-foreground transition-colors">
-              Terms of Use
-            </Link>
-          </div>
-        )}
-      </SidebarFooter>
-    </Sidebar>
+      <div className="p-4 border-t border-border">
+        <div className="flex gap-4 text-xs text-muted-foreground">
+          <Link to="/privacy" className="hover:text-foreground transition-colors">
+            Privacy Policy
+          </Link>
+          <Link to="/terms" className="hover:text-foreground transition-colors">
+            Terms of Use
+          </Link>
+        </div>
+      </div>
+    </aside>
   );
 };
 
