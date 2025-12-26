@@ -64,7 +64,7 @@ interface UsersResponse {
 
 const AdminUsers = () => {
   const [page, setPage] = useState(0);
-  const [take] = useState(20);
+  const [take] = useState(10);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [actionType, setActionType] = useState<"suspend" | "activate" | "disable2fa" | null>(null);
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);

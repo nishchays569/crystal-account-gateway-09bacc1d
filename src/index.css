@@ -194,3 +194,8 @@
     opacity: 1;
   }
 }
+
+.scroll-overlay {
+  overflow-y: auto;
+  scrollbar-gutter: stable both-edges; /* prevents layout shift */
+}
