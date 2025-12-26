@@ -20,7 +20,8 @@ const BinaryTreeView = ({ rootNode, onNodeClick, onAddUser, highlightedNodeIds, 
     onNodeClick?.(node);
   };
 
-  const renderNode = (node: TreeNode | null, parentId?: number, position?: "LEFT" | "RIGHT", depth: number = 0) => {
+  const renderNode = (node: TreeNode | null, parentId?: number, position?: "LEFT" | "RIGHT", depth: number = 0): React.ReactNode => {
+    // Show AddUserNode for null children
     if (!node && parentId !== undefined && position) {
       return (
         <div className="flex flex-col items-center">
@@ -35,7 +36,8 @@ const BinaryTreeView = ({ rootNode, onNodeClick, onAddUser, highlightedNodeIds, 
 
     if (!node) return null;
 
-    const hasChildren = node.leftChild || node.rightChild;
+    // Always show children connectors for nodes (to show add user placeholders)
+    const showChildren = true;
 
     return (
       <div className="flex flex-col items-center">
@@ -49,40 +51,33 @@ const BinaryTreeView = ({ rootNode, onNodeClick, onAddUser, highlightedNodeIds, 
           onClick={() => handleNodeClick(node)}
         />
 
-        {/* Connector Lines */}
-        {(hasChildren || depth < 2) && (
-          <>
+        {/* Connector Lines & Children */}
+        {showChildren && (
+          <div className="flex flex-col items-center">
             {/* Vertical line from node */}
-            <div className="w-0.5 h-6 bg-border" />
+            <div className="w-0.5 h-8 bg-border/60" />
 
-            {/* Horizontal line connecting children */}
-            <div className="flex items-start w-full justify-center">
-              <div className="flex items-center">
-                {/* Left branch line */}
-                <div className="w-24 h-0.5 bg-border rounded-l-full" />
-              </div>
-              <div className="w-0.5 h-0.5 bg-border" />
-              <div className="flex items-center">
-                {/* Right branch line */}
-                <div className="w-24 h-0.5 bg-border rounded-r-full" />
-              </div>
+            {/* Horizontal connector */}
+            <div className="relative flex items-center">
+              <div className="w-[120px] h-0.5 bg-border/60" />
+              <div className="w-[120px] h-0.5 bg-border/60" />
             </div>
 
             {/* Children Container */}
-            <div className="flex gap-12 mt-0">
-              {/* Left Child */}
-              <div className="flex flex-col items-center">
-                <div className="w-0.5 h-6 bg-border" />
-                {renderNode(node.leftChild, node.id, "LEFT", depth + 1)}
+            <div className="flex">
+              {/* Left Child Branch */}
+              <div className="flex flex-col items-center" style={{ minWidth: '160px' }}>
+                <div className="w-0.5 h-8 bg-border/60" />
+                {renderNode(node.leftChild ?? null, node.id, "LEFT", depth + 1)}
               </div>
 
-              {/* Right Child */}
-              <div className="flex flex-col items-center">
-                <div className="w-0.5 h-6 bg-border" />
-                {renderNode(node.rightChild, node.id, "RIGHT", depth + 1)}
+              {/* Right Child Branch */}
+              <div className="flex flex-col items-center" style={{ minWidth: '160px' }}>
+                <div className="w-0.5 h-8 bg-border/60" />
+                {renderNode(node.rightChild ?? null, node.id, "RIGHT", depth + 1)}
               </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     );
