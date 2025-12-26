@@ -5,7 +5,7 @@ import { z } from "zod";
 import { RefreshCw, ChevronDown, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { BE_URL } from "../../config";
+import { BE_URL } from "@/lib/api";
 import api from "@/lib/api";
 // utils/captcha.ts
 export function generateCaptcha(length = 5) {

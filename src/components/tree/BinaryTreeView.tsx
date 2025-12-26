@@ -12,6 +12,10 @@ interface BinaryTreeViewProps {
   searchQuery?: string;
 }
 
+const NODE_WIDTH = 140;
+const HORIZONTAL_GAP = 40;
+const VERTICAL_GAP = 60;
+
 const BinaryTreeView = ({ rootNode, onNodeClick, onAddUser, highlightedNodeIds, searchQuery }: BinaryTreeViewProps) => {
   const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
 
@@ -20,11 +24,29 @@ const BinaryTreeView = ({ rootNode, onNodeClick, onAddUser, highlightedNodeIds, 
     onNodeClick?.(node);
   };
 
-  const renderNode = (node: TreeNode | null, parentId?: number, position?: "LEFT" | "RIGHT", depth: number = 0): React.ReactNode => {
+  // Calculate the width needed for a subtree
+  const getSubtreeWidth = (depth: number): number => {
+    if (depth <= 0) return NODE_WIDTH;
+    return getSubtreeWidth(depth - 1) * 2 + HORIZONTAL_GAP;
+  };
+
+  const renderNode = (
+    node: TreeNode | null, 
+    parentId?: number, 
+    position?: "LEFT" | "RIGHT", 
+    depth: number = 0,
+    maxDepth: number = 5
+  ): React.ReactNode => {
+    const subtreeWidth = getSubtreeWidth(maxDepth - depth);
+    const childSubtreeWidth = getSubtreeWidth(maxDepth - depth - 1);
+
     // Show AddUserNode for null children
     if (!node && parentId !== undefined && position) {
       return (
-        <div className="flex flex-col items-center">
+        <div 
+          className="flex flex-col items-center"
+          style={{ width: subtreeWidth }}
+        >
           <AddUserNode
             position={position}
             parentId={parentId}
@@ -36,11 +58,15 @@ const BinaryTreeView = ({ rootNode, onNodeClick, onAddUser, highlightedNodeIds, 
 
     if (!node) return null;
 
-    // Always show children connectors for nodes (to show add user placeholders)
-    const showChildren = true;
+    const hasLeftChild = node.leftChild !== undefined;
+    const hasRightChild = node.rightChild !== undefined;
+    const showChildren = hasLeftChild || hasRightChild || depth < maxDepth;
 
     return (
-      <div className="flex flex-col items-center">
+      <div 
+        className="flex flex-col items-center"
+        style={{ width: subtreeWidth }}
+      >
         {/* Current Node */}
         <TreeNodeCard
           node={node}
@@ -53,28 +79,76 @@ const BinaryTreeView = ({ rootNode, onNodeClick, onAddUser, highlightedNodeIds, 
 
         {/* Connector Lines & Children */}
         {showChildren && (
-          <div className="flex flex-col items-center">
-            {/* Vertical line from node */}
-            <div className="w-0.5 h-8 bg-border/60" />
+          <div className="flex flex-col items-center w-full">
+            {/* Vertical line from parent node */}
+            <div 
+              className="bg-border/70"
+              style={{ 
+                width: 2, 
+                height: VERTICAL_GAP / 2 
+              }} 
+            />
 
-            {/* Horizontal connector */}
-            <div className="relative flex items-center">
-              <div className="w-[120px] h-0.5 bg-border/60" />
-              <div className="w-[120px] h-0.5 bg-border/60" />
+            {/* Horizontal connector bar with vertical drops */}
+            <div 
+              className="relative flex items-start justify-center"
+              style={{ width: childSubtreeWidth * 2 + HORIZONTAL_GAP }}
+            >
+              {/* Horizontal line */}
+              <div 
+                className="absolute top-0 bg-border/70"
+                style={{ 
+                  height: 2,
+                  left: childSubtreeWidth / 2,
+                  right: childSubtreeWidth / 2,
+                }}
+              />
+              
+              {/* Left vertical connector */}
+              <div 
+                className="absolute bg-border/70"
+                style={{ 
+                  width: 2,
+                  height: VERTICAL_GAP / 2,
+                  left: childSubtreeWidth / 2,
+                  top: 0
+                }}
+              />
+              
+              {/* Right vertical connector */}
+              <div 
+                className="absolute bg-border/70"
+                style={{ 
+                  width: 2,
+                  height: VERTICAL_GAP / 2,
+                  right: childSubtreeWidth / 2,
+                  top: 0
+                }}
+              />
             </div>
 
             {/* Children Container */}
-            <div className="flex">
+            <div 
+              className="flex justify-center"
+              style={{ 
+                marginTop: VERTICAL_GAP / 2 - 2,
+                gap: HORIZONTAL_GAP
+              }}
+            >
               {/* Left Child Branch */}
-              <div className="flex flex-col items-center" style={{ minWidth: '160px' }}>
-                <div className="w-0.5 h-8 bg-border/60" />
-                {renderNode(node.leftChild ?? null, node.id, "LEFT", depth + 1)}
+              <div 
+                className="flex flex-col items-center"
+                style={{ width: childSubtreeWidth }}
+              >
+                {renderNode(node.leftChild ?? null, node.id, "LEFT", depth + 1, maxDepth)}
               </div>
 
               {/* Right Child Branch */}
-              <div className="flex flex-col items-center" style={{ minWidth: '160px' }}>
-                <div className="w-0.5 h-8 bg-border/60" />
-                {renderNode(node.rightChild ?? null, node.id, "RIGHT", depth + 1)}
+              <div 
+                className="flex flex-col items-center"
+                style={{ width: childSubtreeWidth }}
+              >
+                {renderNode(node.rightChild ?? null, node.id, "RIGHT", depth + 1, maxDepth)}
               </div>
             </div>
           </div>
