@@ -12,11 +12,11 @@ interface BinaryTreeViewProps {
   searchQuery?: string;
 }
 
-const NODE_WIDTH = 110;
-const NODE_HEIGHT = 120;
-const HORIZONTAL_SPACING = 20;
-const VERTICAL_SPACING = 60;
-const CONNECTOR_COLOR = "#4a4a4a";
+const NODE_WIDTH = 100;
+const NODE_HEIGHT = 105;
+const HORIZONTAL_SPACING = 16;
+const VERTICAL_SPACING = 50;
+const CONNECTOR_COLOR = "#5C5C5C";
 
 const BinaryTreeView = ({ 
   rootNode, 
@@ -65,8 +65,8 @@ const BinaryTreeView = ({
     endX: number,
     endY: number
   ) => {
-    const midY = startY + (endY - startY) * 0.4;
-    const radius = 8;
+    const midY = startY + (endY - startY) * 0.5;
+    const radius = 6;
 
     // Determine direction
     const goingLeft = endX < startX;
@@ -228,10 +228,10 @@ const BinaryTreeView = ({
 
   const treeWidth = getSubtreeWidth(rootNode);
   const maxDepth = getMaxDepth(rootNode);
-  const treeHeight = (maxDepth + 1) * (NODE_HEIGHT + VERTICAL_SPACING) + 100;
+  const treeHeight = (maxDepth + 1) * (NODE_HEIGHT + VERTICAL_SPACING) + 80;
 
-  const startX = treeWidth / 2 + 50;
-  const startY = 30;
+  const startX = treeWidth / 2 + 40;
+  const startY = 20;
 
   const { elements, connectors } = renderNode(rootNode, startX, startY);
 
@@ -239,15 +239,15 @@ const BinaryTreeView = ({
     <div 
       ref={containerRef}
       className={cn(
-        "w-full overflow-auto p-4",
+        "w-full overflow-auto",
         "scrollbar-thin scrollbar-track-[#1a1a1a] scrollbar-thumb-[#3a3a3a]"
       )}
-      style={{ maxHeight: "calc(100vh - 350px)" }}
+      style={{ maxHeight: "calc(100vh - 280px)" }}
     >
       <div 
         className="relative mx-auto"
         style={{ 
-          width: treeWidth + 100,
+          width: treeWidth + 80,
           height: treeHeight,
           minWidth: "100%"
         }}
@@ -255,7 +255,7 @@ const BinaryTreeView = ({
         {/* SVG layer for connectors */}
         <svg
           className="absolute inset-0 pointer-events-none"
-          style={{ width: treeWidth + 100, height: treeHeight }}
+          style={{ width: treeWidth + 80, height: treeHeight }}
         >
           {connectors}
         </svg>
