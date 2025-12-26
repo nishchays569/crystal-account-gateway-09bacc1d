@@ -15,7 +15,11 @@ import DepositRequests from "./pages/wallet/DepositRequests";
 import Withdraw from "./pages/wallet/Withdraw";
 import WithdrawRequests from "./pages/wallet/WithdrawRequests";
 import Transactions from "./pages/wallet/Transactions";
+import Transfer from "./pages/wallet/Transfer";
 import MyTree from "./pages/tree/MyTree";
+import HolidayList from "./pages/HolidayList";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +56,20 @@ const App = () => (
               <Route path="withdraw" element={<Withdraw />} />
               <Route path="withdraw-requests" element={<WithdrawRequests />} />
               <Route path="transactions" element={<Transactions />} />
+              <Route path="transfer" element={<Transfer />} />
+            </Route>
+
+            {/* Reports Routes */}
+            <Route path="/reports" element={<DashboardLayout />}>
+              <Route path="holiday-list" element={<HolidayList />} />
+            </Route>
+
+            {/* Legal Pages */}
+            <Route path="/privacy" element={<DashboardLayout />}>
+              <Route index element={<PrivacyPolicy />} />
+            </Route>
+            <Route path="/terms" element={<DashboardLayout />}>
+              <Route index element={<TermsAndConditions />} />
             </Route>
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

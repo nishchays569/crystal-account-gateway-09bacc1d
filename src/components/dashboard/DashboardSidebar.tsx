@@ -28,7 +28,7 @@ const sidebarItems: SidebarItem[] = [
   { label: "My Tree", icon: TreePine, path: "/tree" },
   { label: "Deposit", icon: Wallet, path: "/wallet/deposit" },
   { label: "Deposit Requests", icon: FileText, path: "/wallet/deposit-requests" },
-  { label: "Transfer Funds", icon: ArrowRightLeft, path: "/transfer", disabled: true },
+  { label: "Transfer Funds", icon: ArrowRightLeft, path: "/wallet/transfer" },
   { label: "Withdrawal Funds", icon: ArrowDownToLine, path: "/wallet/withdraw" },
   { label: "Withdrawal Requests", icon: FileText, path: "/wallet/withdraw-requests" },
   { label: "Transactions", icon: ArrowRightLeft, path: "/wallet/transactions" },
