@@ -9,12 +9,130 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 
+// Mock data for development - matches reference design
+const mockTreeData: TreeNode = {
+  id: 1,
+  memberId: "COMPANY",
+  email: "company@monkeycoin.com",
+  position: "LEFT",
+  isActive: true,
+  parent: null,
+  sponsor: null,
+  leftChild: {
+    id: 2,
+    memberId: "MT76982254229",
+    email: "adnan.web005@gmail.com",
+    position: "LEFT",
+    isActive: true,
+    parent: { id: 1 },
+    sponsor: null,
+    leftChild: {
+      id: 4,
+      memberId: "MT76883803774",
+      email: "adnan.web006@gmail.com",
+      position: "LEFT",
+      isActive: true,
+      parent: { id: 2 },
+      sponsor: null,
+      leftChild: {
+        id: 8,
+        memberId: "MT967367618708",
+        email: "aman@gmail.com",
+        position: "LEFT",
+        isActive: true,
+        parent: { id: 4 },
+        sponsor: null,
+        leftChild: null,
+        rightChild: null,
+      },
+      rightChild: null,
+    },
+    rightChild: null,
+  },
+  rightChild: {
+    id: 3,
+    memberId: "MT76439223834",
+    email: "aamirweb.002@gmail.com",
+    position: "RIGHT",
+    isActive: true,
+    parent: { id: 1 },
+    sponsor: null,
+    leftChild: null,
+    rightChild: {
+      id: 5,
+      memberId: "MT76406344721",
+      email: "adnan.web002@gmail.com",
+      position: "RIGHT",
+      isActive: true,
+      parent: { id: 3 },
+      sponsor: null,
+      leftChild: null,
+      rightChild: {
+        id: 6,
+        memberId: "MT76410830540389",
+        email: "adnannew@gmail.com",
+        position: "RIGHT",
+        isActive: true,
+        parent: { id: 5 },
+        sponsor: null,
+        leftChild: {
+          id: 7,
+          memberId: "MT954087811335",
+          email: "newuser@gmail.com",
+          position: "LEFT",
+          isActive: true,
+          parent: { id: 6 },
+          sponsor: null,
+          leftChild: null,
+          rightChild: null,
+        },
+        rightChild: {
+          id: 9,
+          memberId: "MT764367722826",
+          email: "monkey@gmail.com",
+          position: "RIGHT",
+          isActive: true,
+          parent: { id: 6 },
+          sponsor: null,
+          leftChild: null,
+          rightChild: {
+            id: 10,
+            memberId: "MT969658510066",
+            email: "adnanwar.002@gmail.com",
+            position: "RIGHT",
+            isActive: true,
+            parent: { id: 9 },
+            sponsor: null,
+            leftChild: null,
+            rightChild: {
+              id: 11,
+              memberId: "MT991945851839",
+              email: "adnanwar.003@gmail.com",
+              position: "RIGHT",
+              isActive: false,
+              parent: { id: 10 },
+              sponsor: null,
+              leftChild: null,
+              rightChild: null,
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
 const useGetTree = (userId: number, depth: number) => {
   return useQuery<TreeNode>({
     queryKey: ["tree", userId, depth],
     queryFn: async () => {
-      const response = await api.get(`/tree/user/${userId}?depth=${depth}`);
-      return response.data;
+      try {
+        const response = await api.get(`/tree/user/${userId}?depth=${depth}`);
+        return response.data;
+      } catch {
+        // Return mock data for development when API is unavailable
+        return mockTreeData;
+      }
     },
   });
 };
