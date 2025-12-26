@@ -100,37 +100,113 @@ const mockTreeData: TreeNode = {
       rightChild: null,
     },
     rightChild: {
-      id: 4,
+      id: 9,
       memberId: "MG27862064",
-      email: "ryan@example.com",
+      email: "gabriel@example.com",
       position: "RIGHT",
       isActive: true,
-      parent: { id: 1 },
+      parent: { id: 3 },
+      sponsor: null,
+      leftChild: null,
+      rightChild: null,
+    },
+  },
+};
+
+// Add Thomas node to rightChild
+mockTreeData.rightChild!.rightChild = {
+  id: 4,
+  memberId: "MG27862064",
+  email: "ryan@example.com",
+  position: "RIGHT",
+  isActive: true,
+  parent: { id: 1 },
+  sponsor: null,
+  leftChild: {
+    id: 13,
+    memberId: "3194160864",
+    email: "gabriel@example.com",
+    position: "LEFT",
+    isActive: true,
+    parent: { id: 4 },
+    sponsor: null,
+    leftChild: null,
+    rightChild: null,
+  },
+  rightChild: {
+    id: 14,
+    memberId: "MG57002064",
+    email: "antonio@example.com",
+    position: "RIGHT",
+    isActive: true,
+    parent: { id: 4 },
+    sponsor: null,
+    leftChild: null,
+    rightChild: null,
+  },
+};
+
+// Add Thomas as a sibling
+mockTreeData.rightChild = {
+  id: 5,
+  memberId: "MG27862064",
+  email: "thomas@example.com",
+  position: "RIGHT",
+  isActive: true,
+  parent: { id: 1 },
+  sponsor: null,
+  leftChild: {
+    id: 3,
+    memberId: "MG27862064",
+    email: "jake@example.com",
+    position: "LEFT",
+    isActive: true,
+    parent: { id: 5 },
+    sponsor: null,
+    leftChild: {
+      id: 8,
+      memberId: "MG27862064",
+      email: "everett@example.com",
+      position: "LEFT",
+      isActive: true,
+      parent: { id: 3 },
+      sponsor: null,
+      leftChild: null,
+      rightChild: null,
+    },
+    rightChild: {
+      id: 9,
+      memberId: "MG27862064",
+      email: "gabriel@example.com",
+      position: "RIGHT",
+      isActive: true,
+      parent: { id: 3 },
       sponsor: null,
       leftChild: {
-        id: 13,
-        memberId: "MG27862064",
-        email: "gabriel@example.com",
+        id: 15,
+        memberId: "MG27853064",
+        email: "gabriel2@example.com",
         position: "LEFT",
         isActive: true,
-        parent: { id: 4 },
+        parent: { id: 9 },
         sponsor: null,
         leftChild: null,
         rightChild: null,
       },
       rightChild: {
-        id: 14,
-        memberId: "MG27862064",
-        email: "gabriel2@example.com",
+        id: 16,
+        memberId: "MG57002064",
+        email: "antonio@example.com",
         position: "RIGHT",
         isActive: true,
-        parent: { id: 4 },
+        parent: { id: 9 },
         sponsor: null,
         leftChild: null,
         rightChild: null,
       },
     },
   },
+  rightChild: null,
 };
 
 const useGetTree = (userId: number, depth: number) => {
@@ -148,28 +224,19 @@ const useGetTree = (userId: number, depth: number) => {
   });
 };
 
-// Helper to count extreme positions
-const countExtremePositions = (node: TreeNode | null): { left: number; right: number } => {
+// Helper to count business volume (total nodes in left/right branches)
+const countBusinessVolume = (node: TreeNode | null): { left: number; right: number } => {
+  const countNodes = (n: TreeNode | null): number => {
+    if (!n) return 0;
+    return 1 + countNodes(n.leftChild) + countNodes(n.rightChild);
+  };
+
   if (!node) return { left: 0, right: 0 };
 
-  let leftCount = 0;
-  let rightCount = 0;
-
-  // Count left extremes
-  let current = node;
-  while (current?.leftChild) {
-    leftCount++;
-    current = current.leftChild;
-  }
-
-  // Count right extremes
-  current = node;
-  while (current?.rightChild) {
-    rightCount++;
-    current = current.rightChild;
-  }
-
-  return { left: leftCount, right: rightCount };
+  return {
+    left: countNodes(node.leftChild),
+    right: countNodes(node.rightChild),
+  };
 };
 
 // Helper to check if a node matches search query
@@ -221,10 +288,10 @@ const MyTree = () => {
     toast.info(`Add user to ${position} of parent ${parentId}`);
   };
 
-  const extremePositions = treeData ? countExtremePositions(treeData) : { left: 0, right: 0 };
+  const businessVolume = treeData ? countBusinessVolume(treeData) : { left: 0, right: 0 };
 
   return (
-    <div className="space-y-6 min-h-screen bg-[#1a1a1a] p-6">
+    <div className="space-y-4 min-h-screen bg-[#0f0f1a] p-4">
       {/* Wallet Cards */}
       <TreeWalletCards />
 
@@ -232,24 +299,18 @@ const MyTree = () => {
       <TreeControls
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        extremeLeft={extremePositions.left}
-        extremeRight={extremePositions.right}
+        extremeLeft={businessVolume.left}
+        extremeRight={businessVolume.right}
       />
 
       {/* Tree Visualization Container */}
-      <div className="min-h-[600px] overflow-hidden">
+      <div className="min-h-[500px] overflow-hidden">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center p-8 space-y-4">
-            <Skeleton className="w-32 h-32 rounded-2xl bg-[#2a2a2a]" />
-            <div className="flex gap-16 mt-8">
-              <Skeleton className="w-32 h-32 rounded-2xl bg-[#2a2a2a]" />
-              <Skeleton className="w-32 h-32 rounded-2xl bg-[#2a2a2a]" />
-            </div>
-            <div className="flex gap-8 mt-8">
-              <Skeleton className="w-28 h-28 rounded-2xl bg-[#2a2a2a]" />
-              <Skeleton className="w-28 h-28 rounded-2xl bg-[#2a2a2a]" />
-              <Skeleton className="w-28 h-28 rounded-2xl bg-[#2a2a2a]" />
-              <Skeleton className="w-28 h-28 rounded-2xl bg-[#2a2a2a]" />
+            <Skeleton className="w-28 h-28 rounded-xl bg-[#2a2a2a]" />
+            <div className="flex gap-12 mt-6">
+              <Skeleton className="w-24 h-24 rounded-xl bg-[#2a2a2a]" />
+              <Skeleton className="w-24 h-24 rounded-xl bg-[#2a2a2a]" />
             </div>
           </div>
         ) : error ? (
@@ -270,27 +331,27 @@ const MyTree = () => {
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-center gap-2 pb-6">
+      <div className="flex items-center justify-center gap-2 pb-4">
         <Button
           variant="ghost"
           size="icon"
-          className="w-10 h-10 rounded-lg bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white"
+          className="w-9 h-9 rounded-lg bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white"
           onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4" />
         </Button>
-        <div className="px-6 py-2 rounded-lg bg-[#2a2a2a] text-white font-medium">
+        <div className="px-5 py-1.5 rounded-lg bg-[#2a2a2a] text-white font-medium text-sm">
           {currentPage} / {totalPages}
         </div>
         <Button
           variant="ghost"
           size="icon"
-          className="w-10 h-10 rounded-lg bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white"
+          className="w-9 h-9 rounded-lg bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white"
           onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages}
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-4 h-4" />
         </Button>
       </div>
     </div>

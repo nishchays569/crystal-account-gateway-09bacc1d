@@ -2,11 +2,11 @@ import { useGetWallets } from "@/pages/api/index";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const walletConfig = [
-  { type: "D_WALLET", label: "D", name: "D Wallet", bgColor: "bg-[#C84B31]" },
-  { type: "M_WALLET", label: "M", name: "M wallet", bgColor: "bg-[#7B2D8E]" },
-  { type: "A_WALLET", label: "A", name: "A Wallet", bgColor: "bg-[#2D8E5E]" },
-  { type: "U_WALLET", label: "U", name: "U Wallet", bgColor: "bg-[#4A4A4A]" },
-  { type: "BONUS_WALLET", label: "B", name: "B Wallet", bgColor: "bg-[#D4781C]" },
+  { type: "D_WALLET", label: "D", name: "D Wallet", gradient: "bg-gradient-to-br from-[#C84B31] to-[#8B2F1C]" },
+  { type: "M_WALLET", label: "M", name: "M Wallet", gradient: "bg-gradient-to-br from-[#7B2D8E] to-[#4A1A55]" },
+  { type: "A_WALLET", label: "A", name: "A Wallet", gradient: "bg-gradient-to-br from-[#2D8E5E] to-[#1A5538]" },
+  { type: "U_WALLET", label: "U", name: "U Wallet", gradient: "bg-gradient-to-br from-[#4A4A4A] to-[#2A2A2A]" },
+  { type: "BONUS_WALLET", label: "B", name: "B Wallet", gradient: "bg-gradient-to-br from-[#D4781C] to-[#8B4F12]" },
 ];
 
 const TreeWalletCards = () => {
@@ -14,9 +14,9 @@ const TreeWalletCards = () => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-5 gap-3">
         {walletConfig.map((wallet) => (
-          <Skeleton key={wallet.type} className="h-28 rounded-xl bg-[#2a2a2a]" />
+          <Skeleton key={wallet.type} className="h-20 rounded-xl bg-[#2a2a2a]" />
         ))}
       </div>
     );
@@ -32,22 +32,22 @@ const TreeWalletCards = () => {
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-5 gap-3">
       {walletConfig.map((wallet) => (
         <div
           key={wallet.type}
-          className={`relative overflow-hidden rounded-xl p-4 ${wallet.bgColor}`}
+          className={`relative overflow-hidden rounded-xl p-3 ${wallet.gradient}`}
         >
           {/* Badge */}
-          <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center mb-2">
-            <span className="text-white font-bold text-sm">{wallet.label}</span>
+          <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center mb-1.5">
+            <span className="text-white font-bold text-xs">{wallet.label}</span>
           </div>
 
           {/* Wallet Name */}
-          <span className="text-white/80 text-xs block mb-1">{wallet.name}</span>
+          <span className="text-white/70 text-[10px] block mb-0.5">{wallet.name}</span>
 
           {/* Balance */}
-          <div className="text-white font-bold text-xl">
+          <div className="text-white font-bold text-lg">
             ${getWalletBalance(wallet.type).toLocaleString("en-US", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
