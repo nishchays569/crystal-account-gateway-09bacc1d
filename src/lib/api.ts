@@ -5,9 +5,12 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
+// Export base URL for external usage
+export const BE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000',
+  baseURL: BE_URL,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',

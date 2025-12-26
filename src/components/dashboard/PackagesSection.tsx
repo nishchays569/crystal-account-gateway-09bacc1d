@@ -27,7 +27,7 @@ const PackagesSection = ({ packages }: { packages: Package[] }) => {
   const queryClient = useQueryClient();
   const activePackages = packages.filter((pkg) => pkg.isActive);
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
-  const [amount, setAmount] = useState<number | null>();
+  const [amount, setAmount] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
