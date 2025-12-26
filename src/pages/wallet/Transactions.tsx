@@ -94,8 +94,8 @@ const Transactions = () => {
     const fetchTransactions = async () => {
       setIsLoadingTransactions(true);
       try {
-        const response = await api.get<TransactionsResponse>("/transactions", {
-          params: {
+        const response = await api.post<TransactionsResponse>("/wallet/transactions", {
+          data: {
             walletType: selectedWalletType,
             skip,
             take: TAKE,
