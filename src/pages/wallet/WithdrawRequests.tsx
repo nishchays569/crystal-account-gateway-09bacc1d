@@ -62,7 +62,7 @@ const WithdrawRequests = () => {
   const fetchRequests = async () => {
     setIsLoading(true);
     try {
-      const response = await api.get("/withdraw-requests", {
+      const response = await api.get("/wallet/withdraw-requests", {
         params: {
           skip: page * PAGE_SIZE,
           take: PAGE_SIZE,
