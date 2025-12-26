@@ -54,7 +54,7 @@ const walletLabels: Record<WalletType, string> = {
 const Transactions = () => {
   const [wallets, setWallets] = useState<ApiWallet[]>([]);
   const [selectedWalletType, setSelectedWalletType] = useState<WalletType | "">("");
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<any>([]);
   const [total, setTotal] = useState(0);
   const [skip, setSkip] = useState(0);
   const [isLoadingWallets, setIsLoadingWallets] = useState(true);
@@ -101,7 +101,7 @@ const Transactions = () => {
             take: TAKE,
           },
         });
-        setTransactions(response.data?.data || []);
+        setTransactions(response.data || []);
         setTotal(response.data?.total || 0);
       } catch (error: any) {
         toast({

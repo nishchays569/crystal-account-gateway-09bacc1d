@@ -62,7 +62,7 @@ const Transfer = () => {
 
   const internalMutation = useMutation({
     mutationFn: async (data: InternalFormData) => {
-      const response = await api.post("/internal-transfer", data);
+      const response = await api.post("/wallet/internal-transfer", data);
       return response.data;
     },
     onSuccess: () => {
@@ -77,7 +77,7 @@ const Transfer = () => {
 
   const externalMutation = useMutation({
     mutationFn: async (data: ExternalFormData) => {
-      const response = await api.post("/transfer", data);
+      const response = await api.post("/wallet/transfer", data);
       return response.data;
     },
     onSuccess: () => {
