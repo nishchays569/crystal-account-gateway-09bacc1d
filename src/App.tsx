@@ -26,6 +26,8 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminSupportQueries from "./pages/admin/AdminSupportQueries";
 import Support from "./pages/Support";
 import Profile from "./pages/Profile";
+import BinaryIncome from "./pages/income/BinaryIncome";
+import DirectIncome from "./pages/income/DirectIncome";
 import RequireAuth from "./components/auth/RequireAuth";
 import NotFound from "./pages/NotFound";
 
@@ -91,6 +93,12 @@ const App = () => (
               <Route path="withdraw-requests" element={<WithdrawRequests />} />
               <Route path="transactions" element={<Transactions />} />
               <Route path="transfer" element={<Transfer />} />
+            </Route>
+
+            {/* Income Routes */}
+            <Route path="/income" element={<ProtectedDashboard />}>
+              <Route path="binary" element={<BinaryIncome />} />
+              <Route path="direct" element={<DirectIncome />} />
             </Route>
 
             {/* Reports Routes */}
