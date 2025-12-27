@@ -1,6 +1,6 @@
-import coinBitcoin from "@/assets/coin-bitcoin.png";
-import coinEthereum from "@/assets/coin-ethereum.png";
-import coinLitecoin from "@/assets/coin-litecoin.png";
+import coinBitcoin from "@/assets/1.png"
+import coinEthereum from "@/assets/2.png";
+import coinLitecoin from "@/assets/3.png";
 
 const FloatingCoins = () => {
   const coins = [
