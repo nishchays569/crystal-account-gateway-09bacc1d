@@ -31,7 +31,7 @@ const SendBonusModal = ({ open, onOpenChange, userId, userName }: SendBonusModal
 
   const sendBonusMutation = useMutation({
     mutationFn: async (data: { userId: number; amount: string; reason?: string }) => {
-      const response = await api.post("/admin/bonus-credit", data);
+      const response = await api.post("/wallet/admin/bonus-credit", data);
       return response.data;
     },
     onSuccess: () => {
