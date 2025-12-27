@@ -58,13 +58,19 @@ const sidebarItems: SidebarItem[] = [
   { label: "Withdrawal Requests", icon: FileText, path: "/wallet/withdraw-requests" },
   { label: "Transactions", icon: ArrowRightLeft, path: "/wallet/transactions" },
   {
+    label: "Income",
+    icon: FileText,
+    children: [
+      { label: "Direct Income", path: "/income/direct" },
+      { label: "Binary Income", path: "/income/binary" },
+    ],
+  },
+  {
     label: "Reports",
     icon: FileText,
     disabled: true,
     children: [
       { label: "Wallet", path: "/reports/wallet" },
-      { label: "Direct Income", path: "/reports/direct-income" },
-      { label: "Binary Income", path: "/reports/binary-income" },
       { label: "Team Activation", path: "/reports/team-activation" },
       { label: "Track Referral", path: "/reports/track-referral" },
       { label: "Gain Report", path: "/reports/gain" },
